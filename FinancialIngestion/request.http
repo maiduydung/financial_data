@@ -1,0 +1,15 @@
+### Ingest all companies (AAPL, MSFT, NVDA)
+POST http://localhost:7071/api/ingest
+Content-Type: application/json
+
+### Ingest single company
+POST http://localhost:7071/api/ingest/AAPL
+Content-Type: application/json
+
+### Ingest MSFT
+POST http://localhost:7071/api/ingest/MSFT
+Content-Type: application/json
+
+### Ingest NVDA
+POST http://localhost:7071/api/ingest/NVDA
+Content-Type: application/json
