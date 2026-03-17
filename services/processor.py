@@ -63,7 +63,7 @@ def _make_news_text(symbol: str, article: dict) -> str:
     )
 
 
-def _chunk_text(text: str, chunk_size: int = CHUNK_SIZE) -> list[str]:
+def chunk_text(text: str, chunk_size: int = CHUNK_SIZE) -> list[str]:
     """Split text into chunks by character count."""
     if len(text) <= chunk_size:
         return [text]
@@ -84,7 +84,7 @@ def process_company_data(raw: dict) -> list[dict]:
     # Profile
     if raw.get("profile"):
         text = _make_profile_text(raw["profile"])
-        for chunk in _chunk_text(text):
+        for chunk in chunk_text(text):
             documents.append({
                 "text": chunk,
                 "metadata": {"company": symbol, "source_type": "profile", "date": "current"},
@@ -94,7 +94,7 @@ def process_company_data(raw: dict) -> list[dict]:
     for stmt in raw.get("income_statements", []):
         text = _make_income_text(symbol, stmt)
         year = stmt.get("fiscalYear", stmt.get("date", "unknown"))
-        for chunk in _chunk_text(text):
+        for chunk in chunk_text(text):
             documents.append({
                 "text": chunk,
                 "metadata": {"company": symbol, "source_type": "income_statement", "date": str(year)},
@@ -104,7 +104,7 @@ def process_company_data(raw: dict) -> list[dict]:
     for ratio in raw.get("ratios", []):
         text = _make_ratios_text(symbol, ratio)
         year = ratio.get("fiscalYear", ratio.get("date", "unknown"))
-        for chunk in _chunk_text(text):
+        for chunk in chunk_text(text):
             documents.append({
                 "text": chunk,
                 "metadata": {"company": symbol, "source_type": "ratios", "date": str(year)},
@@ -114,7 +114,7 @@ def process_company_data(raw: dict) -> list[dict]:
     for article in raw.get("news", []):
         text = _make_news_text(symbol, article)
         date = article.get("publishedDate", "unknown")
-        for chunk in _chunk_text(text):
+        for chunk in chunk_text(text):
             documents.append({
                 "text": chunk,
                 "metadata": {"company": symbol, "source_type": "news", "date": str(date)},

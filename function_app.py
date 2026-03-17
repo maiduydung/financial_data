@@ -12,7 +12,7 @@ import azure.functions as func
 from config import COMPANIES
 from services.fmp_client import fetch_company_data
 from services.blob_service import upload_raw_json
-from services.processor import process_company_data
+from services.processor import process_company_data, chunk_text
 from services.embedding_service import store_documents
 
 app = func.FunctionApp()
@@ -76,4 +76,50 @@ async def ingest_company(req: func.HttpRequest) -> func.HttpResponse:
         body=json.dumps(result),
         mimetype="application/json",
         status_code=status_code,
+    )
+
+
+@app.function_name("IngestLLMData")
+@app.route(route="ingestLLMData", methods=["POST"], auth_level=func.AuthLevel.ANONYMOUS)
+async def ingest_llm_data(req: func.HttpRequest) -> func.HttpResponse:
+    """Ingest pre-extracted text data (e.g. from LLM web search) into Chroma.
+
+    Expected JSON body:
+    {
+        "text": "raw text to chunk and embed",
+        "company": "AAPL",
+        "source_type": "web"       // optional, defaults to "web"
+    }
+    """
+    try:
+        body = req.get_json()
+    except ValueError:
+        return func.HttpResponse("Invalid JSON body", status_code=400)
+
+    text = body.get("text", "").strip()
+    company = body.get("company", "").upper().strip()
+    source_type = body.get("source_type", "web")
+
+    if not text:
+        return func.HttpResponse(json.dumps({"error": "text is required"}), mimetype="application/json", status_code=400)
+    if not company:
+        return func.HttpResponse(json.dumps({"error": "company is required"}), mimetype="application/json", status_code=400)
+
+    logger.info("📥 IngestLLMData: %d chars for %s (source: %s)", len(text), company, source_type)
+
+    # Chunk and build documents
+    chunks = chunk_text(text)
+    documents = [
+        {"text": chunk, "metadata": {"company": company, "source_type": source_type, "date": "current"}}
+        for chunk in chunks
+    ]
+
+    # Embed and store
+    store_documents(documents)
+
+    logger.info("✅ IngestLLMData complete: %d chunks stored for %s", len(documents), company)
+    return func.HttpResponse(
+        body=json.dumps({"status": "success", "company": company, "chunks_stored": len(documents)}),
+        mimetype="application/json",
+        status_code=200,
     )
