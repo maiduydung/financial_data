@@ -1,4 +1,4 @@
-### Ingest all companies (AAPL, MSFT, NVDA)
+### Ingest all companies (AAPL, MSFT, NVDA, etc)
 POST http://localhost:7071/api/ingest
 Content-Type: application/json
 

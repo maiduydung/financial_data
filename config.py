@@ -36,4 +36,29 @@ CHROMA_DATABASE = get_config("CHROMA_DATABASE")
 CHROMA_COLLECTION = get_config("CHROMA_COLLECTION", "financial_docs")
 
 # Target companies
-COMPANIES = ["AAPL", "MSFT", "NVDA"]
+COMPANIES = [
+    # Big Tech
+    "AAPL", "MSFT", "NVDA", "GOOGL", "META", "AMZN", "TSLA", "AVGO", "ORCL", "AMD",
+    "INTC", "QCOM", "TXN", "MU", "AMAT", "LRCX", "KLAC", "SNPS", "CDNS", "NOW",
+    "CRM", "ADBE", "INTU", "PANW", "CRWD", "SNOW", "PLTR", "UBER", "LYFT", "SHOP",
+    # Finance
+    "JPM", "BAC", "GS", "MS", "WFC", "BLK", "SCHW", "AXP", "V", "MA",
+    "C", "USB", "PNC", "TFC", "COF", "DFS", "SYF", "MTB", "RF", "FITB",
+    # Healthcare
+    "JNJ", "UNH", "LLY", "ABBV", "MRK", "PFE", "TMO", "ABT", "DHR", "AMGN",
+    "GILD", "REGN", "VRTX", "BIIB", "ISRG", "SYK", "MDT", "BSX", "EW", "ZBH",
+    # Energy
+    "XOM", "CVX", "COP", "SLB", "EOG", "MPC", "PSX", "OXY", "VLO", "HAL",
+    "BKR", "DVN", "FANG", "MRO", "APA", "HES", "PXD", "KMI", "WMB", "OKE",
+    # Consumer
+    "WMT", "COST", "PG", "KO", "PEP", "MCD", "NKE", "SBUX", "TGT", "HD",
+    "LOW", "TJX", "ROST", "DG", "DLTR", "CVS", "WBA", "EL", "CL", "KMB",
+    # Industrials
+    "CAT", "DE", "BA", "GE", "HON", "RTX", "LMT", "UPS", "FDX", "MMM",
+    "EMR", "ETN", "PH", "ROK", "IR", "AME", "ITW", "GWW", "FAST", "NSC",
+    # Telecom & Media
+    "T", "VZ", "TMUS", "NFLX", "DIS", "CMCSA", "PARA", "WBD", "FOX", "FOXA",
+    # Real Estate & Utilities
+    "AMT", "PLD", "EQIX", "CCI", "SPG", "O", "NEE", "DUK", "SO", "D",
+]
+
