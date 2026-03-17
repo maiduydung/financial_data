@@ -209,3 +209,4 @@ SampleFunctionApp/*
 .DS_Store
 FinancialIngestion/local.settings.json
 .vscode/*
+local.settings.json
